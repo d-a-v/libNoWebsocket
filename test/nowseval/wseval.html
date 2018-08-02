@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+
+<html>
+   <head>
+      <script type = "text/javascript">
+         function WebSocketTest() {
+            
+            if ("WebSocket" in window) {
+               var ws = new WebSocket("ws://localhost:1111");
+               var len = 0;
+				
+               ws.onopen = function() {
+                  document.body.innerText = 'hey\nhey\neval\n';
+               };
+				
+               ws.onmessage = function (evt) { 
+                  //document.body.innerText += 'received:' + evt.data + '\n';
+                  eval(evt.data);
+               };
+				
+               ws.onclose = function() { 
+                  document.body.innerText += 'closed\n';
+               };
+            } else {
+               // The browser doesn't support WebSocket
+               alert("WebSocket NOT supported by your Browser!");
+            }
+         }
+      </script>
+		
+   </head>
+   
+   <body onload="WebSocketTest()">
+   </body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+
+<html>
+   <head>
+      <script type = "text/javascript">
+         function WebSocketTest() {
+            
+            if ("WebSocket" in window) {
+               var ws = new WebSocket("ws://localhost:1111");
+               var len = 0;
+				
+               ws.onopen = function() {
+                  document.body.innerText = 'hey\nhey\n';
+               };
+				
+               ws.onmessage = function (evt) { 
+                  len = evt.data.length;
+                  if (len == 0)
+                      document.body.innerText += 'len=' + evt.data.length + '\n';
+                  ws.send(evt.data);
+               };
+				
+               ws.onclose = function() { 
+                  document.body.innerText += 'closed\n';
+                  document.body.innerText += 'last length = ' + len + '\n';
+               };
+            } else {
+              
+               // The browser doesn't support WebSocket
+               alert("WebSocket NOT supported by your Browser!");
+            }
+         }
+      </script>
+		
+   </head>
+   
+   <body onload="WebSocketTest()">
+   </body>
+</html>

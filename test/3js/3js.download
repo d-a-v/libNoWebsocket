@@ -1,0 +1,2 @@
+mkdir -p js
+curl https://threejs.org/build/three.js > js/three.js || wget -O js/three.js https://threejs.org/build/three.js
