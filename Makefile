@@ -61,13 +61,16 @@ help: ## this help
 	@echo "make options:"
 	@echo "	DEBUG=1 - compile in debug mode"
 
-doc: nows.3 nows.html ## generate documentation
+doc: nows.3 nows.html README.md ## generate documentation
 
 nows.3: src/nows.tex latex2man
 	latex2man/latex2man -M $< $@
 
 nows.html: src/nows.tex latex2man
 	latex2man/latex2man -H $< $@
+
+README.md: nows.html
+	cp nows.html README.md
 
 latex2man:
 	( curl https://www.informatik-vollmer.de/software/latex2man-1.27.tar.gz || \
