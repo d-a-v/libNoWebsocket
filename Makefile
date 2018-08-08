@@ -1,5 +1,5 @@
 
-INSTALLDIR	= /usr/local
+INSTALLDIR	?= /usr/local
 
 CFLAGS		+= -Wall -Wextra
 CFLAGS		+= -Werror
@@ -86,4 +86,4 @@ install-lib: libnows.a
 install-doc: doc
 	mkdir -p $(INSTALLDIR)/share/man/man3
 	cp nows.3 $(INSTALLDIR)/share/man/man3
-	for i in nowsread nowswrite nowsclose nows_simulate_client; do ln -sf nows.3 $(INSTALLDIR)/share/man/man3/$$i.3; done
+	for i in nowsread nowswrite nowsclose nows_simulate_client; do ln -snf nows.3 $(INSTALLDIR)/share/man/man3/$$i.3; done
