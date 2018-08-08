@@ -83,14 +83,14 @@ doc/nows.text: doc/nows.asciidoc
 README.md: doc/nows.text
 	cp $< $@
 
-install: install-lib install-doc
+#install: install-lib install-doc
 
-install-lib: libnows.a
-	mkdir -p $(INSTALLDIR)/lib $(INSTALLDIR)/include
-	cp src/nows.h $(INSTALLDIR)/include
-	cp libnows.a $(INSTALLDIR)/lib
+#install-lib: libnows.a
+#	mkdir -p $(INSTALLDIR)/lib $(INSTALLDIR)/include
+#	cp src/nows.h $(INSTALLDIR)/include
+#	cp libnows.a $(INSTALLDIR)/lib
 
-install-doc: doc
-	mkdir -p $(INSTALLDIR)/share/man/man3
-	cp nows.3 $(INSTALLDIR)/share/man/man3
-	for i in nowsread nowswrite nowsclose nows_simulate_client; do ln -snf nows.3 $(INSTALLDIR)/share/man/man3/$$i.3; done
+#install-doc: doc
+#	mkdir -p $(INSTALLDIR)/share/man/man3
+#	cp nows.3 $(INSTALLDIR)/share/man/man3
+#	for i in nowsread nowswrite nowsclose nows_simulate_client; do ln -snf nows.3 $(INSTALLDIR)/share/man/man3/$$i.3; done
