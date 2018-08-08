@@ -1,4 +1,4 @@
-LibNowebsocket(3)
+LibNoWebsocket(3)
 =================
 :doctype: manpage
 
