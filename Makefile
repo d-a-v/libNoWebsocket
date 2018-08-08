@@ -61,20 +61,27 @@ help: ## this help
 	@echo "make options:"
 	@echo "	DEBUG=1 - compile in debug mode"
 
-doc: nows.3 nows.html README.md ## generate documentation
+.PHONY: doc
+doc: doc/nowsread.3 doc/nows.htmlhelp/index.html doc/nows.pdf doc/nows.text README.md ## generate documentation
 
-nows.3: src/nows.tex latex2man
-	latex2man/latex2man -M $< $@
+doc/nows.asciidoc: src/nows.asciidoc
+	mkdir -p doc
+	cp $< $@
 
-nows.html: src/nows.tex latex2man
-	latex2man/latex2man -H $< $@
+doc/nowsread.3: doc/nows.asciidoc
+	a2x -v --doctype manpage --format manpage doc/nows.asciidoc || rm -f $@
 
-README.md: nows.html
-	cp nows.html README.md
+doc/nows.htmlhelp/index.html: doc/nows.asciidoc
+	a2x -v --doctype manpage --format htmlhelp doc/nows.asciidoc || rm -f $@
 
-latex2man:
-	( curl https://www.informatik-vollmer.de/software/latex2man-1.27.tar.gz || \
-	  wget -O - https://www.informatik-vollmer.de/software/latex2man-1.27.tar.gz ) | tar xfz -
+doc/nows.pdf: doc/nows.asciidoc
+	a2x -v --doctype manpage --format pdf doc/nows.asciidoc || rm -f $@
+
+doc/nows.text: doc/nows.asciidoc
+	a2x -v --doctype manpage --format text doc/nows.asciidoc || rm -f $@
+
+README.md: doc/nows.text
+	cp $< $@
 
 install: install-lib install-doc
 
