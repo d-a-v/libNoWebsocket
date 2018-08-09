@@ -53,7 +53,7 @@ nowsread(3) is very similar to read(3POSIX) in its arguments, behavior, return v
 .sp
 Nothing beeing perfect, here is a list of specific differences or relevant notices:
 .PP
-\fBblocking mode\fR
+\fB\- blocking mode\fR
 .RS 4
 read(3POSIX) blocks the caller until exactly
 \fBlen\fR
@@ -64,14 +64,14 @@ bytes are received\&. The returned value indicates the amount of received bytes 
 buffer\&. nowswrite(3) has however the same behavior as write(3POSIX)\&.
 .RE
 .PP
-\fBnon\-blocking mode\fR
+\fB\- non\-blocking mode\fR
 .RS 4
 Any value (greater than 0) given to
 \fBlen\fR
 will follow read/write(3POSIX) behavior\&.
 .RE
 .PP
-\fBwebsocket specifics or restrictions\fR
+\fB\- websocket specifics or restrictions\fR
 .RS 4
 Underlying ping\-pong facility is not implemented yet\&. Only text buffers are sent or received\&. This is subject for improvements\&.
 .RE
