@@ -1,4 +1,8 @@
-// https:// www.oryx-embedded.com/doc/sha1_8c_source.html
+
+//XXX todo license: check this one from "public domain", need to dig to original source and statement
+//XXX https://github.com/spotify/linux/blob/master/lib/sha1.c
+
+// GPLv2 https://www.oryx-embedded.com/doc/sha1_8c_source.html/
 /**
   * @file sha1.c
   * @brief SHA-1 (Secure Hash Algorithm 1)
