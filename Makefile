@@ -1,9 +1,9 @@
 
-INSTALLDIR	?= /usr/local
+INSTALLPREFIX	?= /usr/local
 
 CFLAGS		+= -Wall -Wextra
 CFLAGS		+= -Werror
-LDFLAGS		= -L. -lnows
+LDFLAGS		+= -L. -lnows
 
 ifeq ($(DEBUG),)
 CFLAGS		+= -O2
@@ -27,9 +27,11 @@ SRCDIRS		= $(A)/.. $(A) src
 INCLUDES	= $(SRCDIRS:%=-I%)
 CFLAGS		+= $(INCLUDES)
 
-all: buildall help
+default: help
 
-buildall: $(TARGETS:%.c=%)
+all: lib doc ## build library and documentation
+
+lib: $(TARGETS:%.c=%) ## build library only
 
 %.o: %.c
 	$(CC) $(CFLAGS) -MD -MF $(@:%.o=%.d) -c $< -o $@
@@ -45,21 +47,25 @@ analyze: $(SRC:%.c=%.analyze) $(TESTS:%=%.analyze) ## run clang's --analyze
 %.analyze: %.c
 	$(CC) $(CFLAGS) --analyze -c $< -o $@
 
-clean: ## remove generated files except doc
+clean: ## remove library
 	rm -f $(LIB) $(TARGETS)
 	rm -f $(SRC:%.c=%.d) $(SRC:%.c=%.o) $(SRC:%.c=%.analyze)
 	rm -f $(TESTS:%=%.d) $(TESTS:%=%.o) $(TESTS:%=%.analyze)
+
+mrproper: clean ## remove library and doc
+	rm -rf doc README.md
 
 .SUFFIXES: # no implicit rules
 .PRECIOUS: $(TARGETS:%=%.o)
 -include $(SRCDIRS:%=%/*.d) $(TESTS:%=%.d)
 
 help: ## this help
-	@echo "-----------"
 	@echo "rules are:"
-	@sed -n 's,\(^[^:]*:\)[^#]*##\(.*\),\1 \2,p' < $(firstword $(MAKEFILE_LIST))
-	@echo "make options:"
+	@sed -n 's,\(^[^:]*:\)[^#]*##\(.*\),\t\1 \2,p' < $(firstword $(MAKEFILE_LIST))
+	@echo "make variables:"
 	@echo "	DEBUG=1 - compile in debug mode"
+	@echo "	INSTALLPREFIX=$(INSTALLPREFIX) - default"
+	@echo "	CFLAGS LDFLAGS CC AR"
 
 .PHONY: doc
 doc: doc/nowsread.3 doc/nows.htmlhelp/index.html doc/nows.pdf doc/nows.text README.md ## generate documentation
@@ -68,29 +74,33 @@ doc/nows.asciidoc: src/nows.asciidoc
 	mkdir -p doc
 	cp $< $@
 
+A2X = a2x -v --doctype manpage
+A2XCHECK = 2>&1 > doc/doc.log && rm -f doc/doc.log || { rm -f $@; cat doc/doc.log; false; }
+
 doc/nowsread.3: doc/nows.asciidoc
-	a2x -v --doctype manpage --format manpage doc/nows.asciidoc || rm -f $@
+	$(A2X) --format manpage $< $(A2XCHECK)
 
 doc/nows.htmlhelp/index.html: doc/nows.asciidoc
-	a2x -v --doctype manpage --format htmlhelp doc/nows.asciidoc || rm -f $@
+	$(A2X) --format htmlhelp $< $(A2XCHECK)
 
 doc/nows.pdf: doc/nows.asciidoc
-	a2x -v --doctype manpage --format pdf doc/nows.asciidoc || rm -f $@
+	$(A2X) --format pdf $< $(A2XCHECK)
 
 doc/nows.text: doc/nows.asciidoc
-	a2x -v --doctype manpage --format text doc/nows.asciidoc || rm -f $@
+	$(A2X) --format text $< $(A2XCHECK)
 
 README.md: doc/nows.text
 	cp $< $@
 
-#install: install-lib install-doc
+# do not check install dependencies because make install may be run with 'sudo'
 
-#install-lib: libnows.a
-#	mkdir -p $(INSTALLDIR)/lib $(INSTALLDIR)/include
-#	cp src/nows.h $(INSTALLDIR)/include
-#	cp libnows.a $(INSTALLDIR)/lib
+install: install-lib install-doc ## install lib and doc (sudo make INSTALLPREFIX=/some/path install)
 
-#install-doc: doc
-#	mkdir -p $(INSTALLDIR)/share/man/man3
-#	cp nows.3 $(INSTALLDIR)/share/man/man3
-#	for i in nowsread nowswrite nowsclose nows_simulate_client; do ln -snf nows.3 $(INSTALLDIR)/share/man/man3/$$i.3; done
+install-lib: ## lib must be built
+	mkdir -p $(INSTALLPREFIX)/lib $(INSTALLPREFIX)/include
+	cp src/nows.h $(INSTALLPREFIX)/include
+	cp libnows.a $(INSTALLPREFIX)/lib
+
+install-doc: ## doc must be built
+	mkdir -p $(INSTALLPREFIX)/share/man/man3
+	cp doc/nows*.3 $(INSTALLPREFIX)/share/man/man3

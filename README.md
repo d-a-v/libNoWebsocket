@@ -35,10 +35,10 @@ DESCRIPTION
 
 nowsread(3) is very similar to read(3POSIX) in its arguments,
 behavior, return value, in blocking or non blocking mode, when sock
-is a STREAMS socket in byte-stream mode (message-nondiscard and
+is a STREAMS socket in byte-stream mode (message-nondiscard and 
 message-discard modes are yet unconsidered). Same goes to nowswrite
 (3) regarding write(3POSIX). The websocket protocol includes a
-handshake process which sadly breaks symetry between peers. As
+handshake process which sadly breaks symmetry between peers. As
 generally HTML5 browsers act as websocket clients, nowsread(3) and
 nowswrite(3) act by default as websocket server (even if the socket 
 sock is a SOCK_STREAM client). A call to nows_simulate_client(3)
@@ -76,8 +76,6 @@ EAGAIN is never continuously returned and cannot induce an active
 loop. Otherwise the returned value indicates the number of bytes sent
 or received.
 
-nowsclose(3) is similar to close(3POSIX).
-
 now_simulate_client(3) returns 0 on success, -1 on error and in that
 case errno is set.
 
@@ -92,4 +90,14 @@ EAGAIN
     can be returned by nowsread(3) or nowswrite(3) in blocking mode
     (however never continuously thus not inducing an active loop).
     This is subject for improvements.
+
+LICENSE
+
+GPLv2 (due to sha1 embedded library - subject for changes)
+
+AUTHOR
+
+CNRS
+
+https://redmine.laas.fr/projects/libnowebsocket
 
