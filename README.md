@@ -47,7 +47,7 @@ prior to nowsread(3) and nowswrite(3) will switch this behavior.
 Nothing beeing perfect, here is a list of specific differences or
 relevant notices:
 
-blocking mode
+- blocking mode
     read(3POSIX) blocks the caller until exactly len bytes are
     received. Similarly nowsread(3) blocks the caller until at least
     one byte is received, but due to the nature of the websocket
@@ -55,10 +55,10 @@ blocking mode
     received. The returned value indicates the amount of received
     bytes in the data buffer. nowswrite(3) has however the same
     behavior as write(3POSIX).
-non-blocking mode
+- non-blocking mode
     Any value (greater than 0) given to len will follow read/write
     (3POSIX) behavior.
-websocket specifics or restrictions
+- websocket specifics or restrictions
     Underlying ping-pong facility is not implemented yet. Only text
     buffers are sent or received. This is subject for improvements.
 
