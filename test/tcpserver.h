@@ -171,3 +171,11 @@ void setcntl (int fd, int cmd, int flags, const char* name)
 	if (fcntl(fd, cmd, flags) == -1)
 		perror(name);
 }
+
+void printret (const char* what, int ret)
+{
+    printf("%s: ret=%d", what, ret);
+    if (ret == -1)
+        printf(" (errno=%d EAGAIN=%d)", errno, EAGAIN);
+    printf("\n");
+}

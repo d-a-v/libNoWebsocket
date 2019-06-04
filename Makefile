@@ -20,6 +20,7 @@ TESTS		+= test/sha1+b64/sha1test
 TESTS		+= test/nowsecho/nowsecho
 TESTS		+= test/nowseval/nowseval
 TESTS		+= test/3js/interact
+TESTS		+= test/clisrv/cli test/clisrv/srv test/clisrv/cli2 test/clisrv/srv2
 TARGETS		= $(LIB) $(TESTS)
 
 SRC		+= src/nows.c $(A)/wsb64enc.c $(A)/wsc.c $(A)/wssha1.c

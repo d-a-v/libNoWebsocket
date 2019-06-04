@@ -1,2 +1,0 @@
-(cd ..; echo "please open file://$(pwd)/console.html"; )
-gcc -g -Wall -Wextra -I ../../utility ../../utility/*.c console.c -o console && ncat -l 8080 -vvv -c "valgrind ./console"
